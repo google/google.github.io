@@ -88,31 +88,31 @@ permalink: /404.html
       </a>
     </div>
     <script>
+      // Redirects github pages for repos that have moved to another org.
       (function() {
 
         'use strict';
 
-        var movedRepos = [
-          'google-api-java-client',
-          'google-api-nodejs-client',
-          'google-api-python-client',
-          'google-auth-library-java',
-          'google-auth-library-nodejs',
-          'google-http-java-client',
-          'google-oauth-java-client',
-          'oauth2client'
-        ];
+        // Mapping from repo name to the org it moved to.
+        var movedRepos = {
+          'google-api-java-client':     'googleapis',
+          'google-api-nodejs-client':   'googleapis',
+          'google-api-python-client':   'googleapis',
+          'google-auth-library-java':   'googleapis',
+          'google-auth-library-nodejs': 'googleapis',
+          'google-http-java-client':    'googleapis',
+          'google-oauth-java-client':   'googleapis',
+          'oauth2client':               'googleapis'
+        };
 
-        var pathname = location.pathname;
-        if (location.host != 'googleapis.github.io') {
-          var found = movedRepos.find(function(repo) {
-            var regex = new RegExp('^/'+repo+'(/|$)');
-            return regex.test(pathname);
-          });
-          if (found) {
-            location.host = 'googleapis.github.io';
+        var repoRegex = new RegExp('^/([^/]+)(/|$)');
+        var match = repoRegex.exec(location.pathname);
+        if (match) {
+          var newOrg = movedRepos[match[1]];
+          if (newOrg) {
+            location.host = newOrg + '.github.io';
           }
-        } 
+        }
 
       }());
     </script>
